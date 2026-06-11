@@ -1,0 +1,49 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter files
+/android/
+/ios/
+/linux/
+/macos/
+/windows/
+/web/
+*.apk
+*.ipa
+*.dill
+*.exe
+*.dll
+*.dylib
+*.so
+*.unversioned.json
+
+# Build directories
+build/
+/doc/api/
+
+# pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Exceptions to above rules
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages

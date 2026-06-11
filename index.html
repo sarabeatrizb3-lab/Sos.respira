@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Respira - Suporte Mental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* HOME SCREEN */
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mood-btn {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mood-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .mood-emoji {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .mood-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .mood-desc {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+
+        .btn-purple {
+            background: #9C27B0;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background: #7B1FA2;
+        }
+
+        .btn-danger {
+            background: #F44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #D32F2F;
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* CHAT SCREEN */
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            display: flex;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+        }
+
+        .message.ai .message-bubble {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .message.user .message-bubble {
+            background: #2196F3;
+            color: white;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-area input:focus {
+            border-color: #2196F3;
+        }
+
+        .btn-send {
+            background: #2196F3;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .btn-send:hover {
+            background: #1976D2;
+        }
+
+        /* BREATHING SCREEN */
+        .breathing-content {
+            text-align: center;
+        }
+
+        .breathing-title {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .breathing-instructions {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+            animation: breathe 4s infinite;
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(0.5); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(0.5); }
+        }
+
+        .breathing-circle.paused {
+            animation: none;
+        }
+
+        .breathing-status {
+            font-size: 16px;
+            color: #333;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .breathing-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* EMERGENCY */
+        .emergency-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emergency-modal.active {
+            display: flex;
+        }
+
+        .emergency-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .emergency-content h2 {
+            color: #F44336;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .emergency-content p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .emergency-numbers {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .emergency-numbers div {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #F57C00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🫁 SOS Respira</h1>
+            <p>Seu suporte de saúde mental</p>
+        </div>
+
+        <div class="content">
+            <!-- HOME SCREEN -->
+            <div id="homeScreen" class="screen active">
+                <div class="welcome-text">
+                    <h2>Como você está hoje?</h2>
+                    <p>Sua saúde mental é importante</p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <p style="color: #333; font-weight: bold; margin-bottom: 15px;">Selecione seu humor:</p>
+                    <div class="mood-grid">
+                        <div class="mood-btn" onclick="selectMood('Ótimo')">
+                            <div class="mood-emoji">😄</div>
+                            <div class="mood-name">Ótimo</div>
+                            <div class="mood-desc">Muito bem!</div>
+                        </div>
+                        <div class="mood-btn" onclick="selectMood('Bom')">
+                            <div class="mood-emoji">🙂</div>
+                            <div class="mood-name">Bom</div>
+                            <div class="mood-desc">Tudo bem!</div>
+                        </div>
+                        <div class="mood-btn" onclick="selectMood('Neutro')">
+                            <div class="mood-emoji">😐</div>
+                            <div class="mood-name">Neutro</div>
+                            <div class="mood-desc">Mais ou menos</div>
+                        </div>
+                        <div class="mood-btn" onclick="selectMood('Triste')">
+                            <div class="mood-emoji">😕</div>
+                            <div class="mood-name">Triste</div>
+                            <div class="mood-desc">Preocupado</div>
+                        </div>
+                        <div class="mood-btn" onclick="selectMood('Péssimo')">
+                            <div class="mood-emoji">😢</div>
+                            <div class="mood-name">Péssimo</div>
+                            <div class="mood-desc">Preciso de ajuda</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="color: #333; font-weight: bold; margin-bottom: 15px;">O que você deseja fazer?</p>
+                <div class="action-buttons">
+                    <button class="btn btn-purple" onclick="goToBreathing()">🌬️ Exercício de Respiração</button>
+                    <button class="btn btn-primary" onclick="goToChat()">💬 Conversar com IA</button>
+                    <button class="btn btn-danger" onclick="showEmergency()">⚠️ Emergência</button>
+                </div>
+            </div>
+
+            <!-- CHAT SCREEN -->
+            <div id="chatScreen" class="screen">
+                <button class="btn back-btn" onclick="goHome()">← Voltar</button>
+                <div class="chat-container">
+                    <div class="messages" id="messagesContainer"></div>
+                    <div class="input-area">
+                        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="handleEnter(event)">
+                        <button class="btn-send" onclick="sendMessage()">📤</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BREATHING SCREEN -->
+            <div id="breathingScreen" class="screen">
+                <button class="btn back-btn" onclick="goHome()">← Voltar</button>
+                <div class="breathing-content">
+                    <h2 class="breathing-title">Técnica de Respiração 4-7-8</h2>
+                    <div class="breathing-instructions">
+                        1. Inspire por 4 segundos<br>
+                        2. Segure por 7 segundos<br>
+                        3. Expire por 8 segundos<br><br>
+                        Repita 5 vezes para aliviar a ansiedade
+                    </div>
+                    <div class="breathing-circle" id="breathingCircle">0</div>
+                    <div class="breathing-status" id="breathingStatus">Pronto para começar?</div>
+                    <div class="breathing-buttons">
+                        <button class="btn btn-primary" id="breathBtn" onclick="startBreathing()">▶️ Começar</button>
+                        <button class="btn" style="background: #f0f0f0; color: #333; display: none;" id="stopBtn" onclick="stopBreathing()">⏹️ Parar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMERGENCY MODAL -->
+    <div class="emergency-modal" id="emergencyModal">
+        <div class="emergency-content">
+            <h2>🚨 Emergência</h2>
+            <p>Se você está em uma situação de emergência ou tendo pensamentos autodestrutivos, procure imediatamente ajuda:</p>
+            <div class="emergency-numbers">
+                <div>📞 CVV: 188</div>
+                <div>📞 Polícia: 190</div>
+                <div>📞 SAMU: 192</div>
+            </div>
+            <p>Converse com um responsável, familiar ou procure o serviço local de emergência.</p>
+            <button class="btn btn-primary" onclick="closeEmergency()">OK, Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        let isBreathing = false;
+        let breathCount = 0;
+
+        function goHome() {
+            stopBreathing();
+            showScreen('homeScreen');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // MOOD
+        function selectMood(mood) {
+            alert(`Humor selecionado: ${mood}`);
+        }
+
+        // CHAT
+        function goToChat() {
+            showScreen('chatScreen');
+            setTimeout(() => document.getElementById('chatInput').focus(), 100);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            setTimeout(() => {
+                const responses = [
+                    'Entendo. Você quer conversar sobre isso?',
+                    'Que interessante! Me conte mais.',
+                    'Como você se sente em relação a isso?',
+                    'Isso é algo que o preocupa?',
+                    'Tudo bem se você não quiser compartilhar. Estou aqui para ouvir.',
+                    'Que bom que você está compartilhando isso comigo.',
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse, 'ai');
+            }, 800);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        // BREATHING
+        function goToBreathing() {
+            showScreen('breathingScreen');
+        }
+
+        function startBreathing() {
+            isBreathing = true;
+            breathCount = 0;
+            document.getElementById('breathBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'inline-block';
+            document.getElementById('breathingCircle').classList.remove('paused');
+            breathingCycle();
+        }
+
+        function breathingCycle() {
+            if (!isBreathing || breathCount >= 5) {
+                isBreathing = false;
+                document.getElementById('breathBtn').style.display = 'inline-block';
+                document.getElementById('stopBtn').style.display = 'none';
+                document.getElementById('breathingCircle').classList.add('paused');
+                document.getElementById('breathingStatus').textContent = '✅ Parabéns! Você completou!';
+                return;
+            }
+
+            breathCount++;
+            document.getElementById('breathingCircle').textContent = breathCount;
+            document.getElementById('breathingStatus').textContent = `Respirando... (${breathCount}/5)`;
+
+            setTimeout(breathingCycle, 4000);
+        }
+
+        function stopBreathing() {
+            isBreathing = false;
+            breathCount = 0;
+            document.getElementById('breathBtn').style.display = 'inline-block';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('breathingCircle').textContent = '0';
+            document.getElementById('breathingCircle').classList.add('paused');
+            document.getElementById('breathingStatus').textContent = 'Pronto para começar?';
+        }
+
+        // EMERGENCY
+        function showEmergency() {
+            document.getElementById('emergencyModal').classList.add('active');
+        }
+
+        function closeEmergency() {
+            document.getElementById('emergencyModal').classList.remove('active');
+        }
+
+        // INIT
+        window.addEventListener('load', () => {
+            addMessage('Olá! Bem-vindo ao SOS Respira. Como posso ajudar você hoje?', 'ai');
+        });
+    </script>
+</body>
+</html>
